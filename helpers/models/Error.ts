@@ -1,0 +1,5 @@
+export class Error {
+  errorType?: string;
+  msg?: string;
+  notice?: string;
+}
