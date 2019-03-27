@@ -22,13 +22,13 @@ export class ErrorComponent {
    * @param {Error} error
    */
   public showError(error: Error) {
-    this.form.setError(error);
+    this.form.setError();
 
     if (this.eventSubscription) {
       this.destroyEvents();
     }
     if (this.errorBlock) {
-      this.errorText.innerHTML = error.message;
+      this.errorText.innerHTML = error.message || error.msg;
       this.assignEvents();
     }
   }

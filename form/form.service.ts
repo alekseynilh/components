@@ -26,12 +26,12 @@ export class FormService {
    * @param {FormModel} form
    * @returns {Observable<MouseEvent>}
    */
-  public formSubmit(form: FormModel): Observable<MouseEvent> {
+  public formSubmit(form: FormModel): Observable<string | boolean> {
     return fromEvent(form.form, 'submit')
       .pipe(
         tap((event: MouseEvent) => event.preventDefault()),
         filter(() => this.validator.validate(form.checkElements)),
-        switchMap(() => this.register(form.getData())),
+        switchMap(() => this.register(form.getData()).then(url => form.success(url))),
         catchError(error => this.handleError(error.error as Error, form)),
         repeat(),
       );
@@ -67,13 +67,18 @@ export class FormService {
   private register(data: Form) {
     const url = this.buildUrl(`${data.landing}/addCustomer`);
     return this.appService.post(`${url}`, data)
-      .then(response => response);
+      .then(response => response.url as string);
   }
 
+  /**
+   *
+   * @param {Error} error
+   * @param {FormModel} form
+   */
   private handleError(error: Error, form: FormModel) {
     if (this.errorComponent) {
       this.errorComponent.setActiveModel(form);
-      this.errorComponent.showError(error);
+      this.errorComponent.showError(error || { message: 'Something wrong' });
     }
     return of(false);
   }

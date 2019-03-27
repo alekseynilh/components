@@ -21,7 +21,6 @@ export class FormComponent {
   private subscribe() {
     this.repository.forms.forEach((item: FormModel) => {
       this.eventSubscription.push(this.service.formSubmit(item).subscribe());
-
       if ('onchange' === item.type) {
         item.checkElements.forEach((element: HTMLElement) =>
           this.service.validateElement(element).subscribe());
