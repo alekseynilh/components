@@ -15,7 +15,10 @@ export class FormService {
     private appService: AppService,
   ) {
     this.validator = new FormValidator();
-    this.errorComponent = new ErrorComponent();
+    const errorSection = document.querySelector('[data-modal="error"]') as HTMLElement;
+    if (errorSection) {
+      this.errorComponent = new ErrorComponent(errorSection);
+    }
   }
 
   /**

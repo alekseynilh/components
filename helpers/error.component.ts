@@ -5,14 +5,14 @@ import { Subscription } from 'rxjs/index';
 
 export class ErrorComponent {
   private service: ErrorService;
-  private errorBlock: HTMLElement;
   private errorText: HTMLElement;
   private errorClose: HTMLElement;
   private eventSubscription: Subscription;
   private form: FormModel;
-  constructor() {
+  constructor(
+    private errorBlock: HTMLElement,
+  ) {
     this.service = new ErrorService();
-    this.errorBlock = document.querySelector('[data-modal="error"]');
     this.errorText = this.errorBlock.querySelector('[data-modal="text"]');
     this.errorClose = this.errorBlock.querySelector('[data-modal="close"]');
   }
