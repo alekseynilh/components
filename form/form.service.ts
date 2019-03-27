@@ -71,8 +71,10 @@ export class FormService {
   }
 
   private handleError(error: Error, form: FormModel) {
-    this.errorComponent.setActiveModel(form);
-    this.errorComponent.showError(error);
+    if (this.errorComponent) {
+      this.errorComponent.setActiveModel(form);
+      this.errorComponent.showError(error);
+    }
     return of(false);
   }
 }
