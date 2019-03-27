@@ -1,6 +1,8 @@
 import { Form } from './form';
+import { Error } from '../helpers/models/Error';
 
 export class FormModel {
+  readonly errorClass = 'form-error';
   private elements: HTMLFormElement[];
   private validateElements: HTMLFormElement[];
   private validationType: string;
@@ -36,7 +38,6 @@ export class FormModel {
     return data;
   }
 
-
   /**
    *
    * @returns {string}
@@ -51,5 +52,20 @@ export class FormModel {
    */
   public get checkElements(): HTMLFormElement[] {
     return this.validateElements;
+  }
+
+  /**
+   *
+   * @param {Error} error
+   */
+  public setError(error: Error): void {
+    this.form.classList.add(this.errorClass);
+  }
+
+  /**
+   *
+   */
+  public hideError() {
+    this.form.classList.remove(this.errorClass);
   }
 }
