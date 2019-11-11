@@ -1,5 +1,5 @@
-import { fromEvent } from 'rxjs';
-import { tap } from 'rxjs/operators';
+import { fromEvent, combineLatest, merge, Observable } from 'rxjs';
+import { combineAll, filter, map, tap  } from 'rxjs/operators';
 
 export class ButtonsService {
   public buttonEvent(button: HTMLElement) {
@@ -7,5 +7,18 @@ export class ButtonsService {
       .pipe(
         tap((event: MouseEvent) => event.preventDefault()),
       );
+  }
+
+  public documentEventsToggler(element: HTMLElement): Observable<boolean> {
+    const documentClick =  fromEvent(document, 'click')
+      .pipe(
+        map((event: MouseEvent) => element.contains(<HTMLElement>event.target) || element === event.target),
+      );
+    const documentKeys = fromEvent(document, 'keydown')
+      .pipe(
+        filter((event: KeyboardEvent) => event.code === 'Escape'),
+        map(() => false),
+      );
+    return merge(documentKeys, documentClick);
   }
 }

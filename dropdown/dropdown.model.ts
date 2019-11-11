@@ -15,6 +15,15 @@ export class DropdownModel {
 
   /**
    *
+   * @param {string} key
+   * @returns {string | number}
+   */
+  public getValueByKey(key: string): string | number {
+    return this.inputValue[key];
+  }
+
+  /**
+   *
    * @returns {string}
    */
   public get value(): string {

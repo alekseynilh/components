@@ -34,7 +34,13 @@ export class DropdownRepository {
    * @param {string} value
    */
   public find(value: string): DropdownModel[] {
-    return this.models.filter(item => item.value.indexOf(value) !== -1 || item.text.indexOf(value) !== -1);
+    return this.models.filter((item: DropdownModel) => {
+      const valueArray = value.replace(/\s+/g, '').split('');
+      return Object.keys(item.inputValue).filter((key: string) => {
+        const keysArray = item.inputValue[key].split('');
+        return valueArray.every((current, i) => current === keysArray[i]);
+      }).length > 0;
+    });
   }
 
   /**

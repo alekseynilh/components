@@ -1,7 +1,6 @@
 import { Form } from './form';
 
 export class FormModel {
-  readonly errorClass = 'form-error';
   private elements: HTMLFormElement[];
   private validateElements: HTMLFormElement[];
   private validationType: string;
@@ -55,23 +54,10 @@ export class FormModel {
 
   /**
    *
-   */
-  public setError(): void {
-    this.form.classList.add(this.errorClass);
-  }
-
-  /**
-   *
-   */
-  public hideError() {
-    this.form.classList.remove(this.errorClass);
-  }
-
-  /**
-   *
    * @param {string} url
+   * @returns {string}
    */
-  public success(url: string) {
+  public success(url: string): string {
     return window.location.href = url;
   }
 }

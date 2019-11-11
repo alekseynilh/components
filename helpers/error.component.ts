@@ -2,39 +2,47 @@ import { Error } from './models/Error';
 import { FormModel } from '../form/form.model';
 import { ErrorService } from './error.service';
 import { Subscription } from 'rxjs/index';
+import { ErrorRepository } from './error.repository';
 
 export class ErrorComponent {
   private service: ErrorService;
-  private errorText: HTMLElement;
-  private errorClose: HTMLElement;
   private eventSubscription: Subscription;
   private form: FormModel;
+  private errorBlocks: {
+    [key: string]: HTMLElement,
+  };
+  private repository: ErrorRepository;
   constructor(
-    private errorBlock: HTMLElement,
   ) {
+    this.errorBlocks = {
+      error: document.querySelector('[data-modal="error"]'),
+      critical: document.querySelector('[data-modal="critical"]'),
+    };
+
     this.service = new ErrorService();
-    this.errorText = this.errorBlock.querySelector('[data-modal="text"]');
-    this.errorClose = this.errorBlock.querySelector('[data-modal="close"]');
+    this.repository = new ErrorRepository(this.errorBlocks);
   }
 
   /**
    *
    * @param {Error} error
+   * @param {string} type
    */
-  public showError(error: Error) {
-    this.form.setError();
+  public showError(error: Error, type: string = 'error') {
 
     if (this.eventSubscription) {
       this.destroyEvents();
     }
-    if (this.errorBlock) {
-      this.errorText.innerHTML = error.message || error.msg;
-      this.assignEvents();
-    }
+
+    this.repository.setActiveModel(type);
+    this.repository.setErrorText(error.message || error.msg);
+    this.repository.showError();
+
+    this.assignEvents();
   }
 
   public hideError() {
-    this.form.hideError();
+    this.repository.hideError();
     this.destroyEvents();
   }
 
@@ -50,7 +58,8 @@ export class ErrorComponent {
    *
    */
   private assignEvents(): void {
-    this.eventSubscription = this.service.clickError(this.errorClose).subscribe(() => this.hideError());
+    this.eventSubscription =
+      this.service.clickError(this.repository.getCloseElement()).subscribe(() => this.hideError());
   }
 
   /**

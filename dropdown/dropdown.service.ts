@@ -57,7 +57,7 @@ export class DropdownService {
         map((event: KeyboardEvent) => {
           event.preventDefault();
           event.stopImmediatePropagation();
-          return (event.target as HTMLInputElement).value.toLowerCase();
+          return (event.target as HTMLInputElement).value.toLowerCase().replace('+', '');
         }),
       );
   }
